@@ -2,7 +2,7 @@
 A simple-to-use TCP server and client library.
 
 
-# Examples
+## Examples
 
 ### Echo Server
 ```csharp
