@@ -1,4 +1,10 @@
 # SimpleTcp
+<p>
+  <img alt="MIT license" src="https://img.shields.io/badge/License-MIT-green.svg">
+  <img alt="Nuget version" src="https://img.shields.io/nuget/v/SimpleTcpLib">
+  <img alt="Nuget downloads" src="https://img.shields.io/nuget/dt/SimpleTcpLib">
+  <img alt="GitHub starts" src="https://img.shields.io/github/stars/akon47/SimpleTcp">
+</p>
 A simple-to-use TCP server and client library.
 
 
