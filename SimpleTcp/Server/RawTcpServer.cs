@@ -35,6 +35,8 @@ namespace SimpleTcp.Server
         /// Opened Server Port
         /// </summary>
         public int Port { get => (tcpListener?.LocalEndpoint as IPEndPoint)?.Port ?? -1; }
+
+        public long TotalReceiveBytes { get; private set; }
 		#endregion
 
 		#region Private Member
@@ -176,6 +178,7 @@ namespace SimpleTcp.Server
 		{
 			OnDataReceived(connection, receivedSize);
 			DataReceived?.Invoke(this, new DataReceivedEventArgs(connection));
+            TotalReceiveBytes += receivedSize;
 		}
 		#endregion
 		
@@ -188,7 +191,9 @@ namespace SimpleTcp.Server
 			public NetworkStream NetworkStream { get => TcpClient?.GetStream(); }
 
 			public int BytesToRead { get => ringBuffer.Count; }
-			public int DropBytes { get; private set; } = 0;
+			public long DropBytes { get; private set; } = 0;
+            public long SendBytes { get; private set; } = 0;
+            public long ReceiveBytes { get; private set; } = 0;
 			#endregion
 
 			public delegate void DataReceivedCallback(Connection connection, int receivedSize);
@@ -238,6 +243,7 @@ namespace SimpleTcp.Server
 						{
 							DropBytes += (readSize - writeBytes);
 						}
+                        ReceiveBytes += readSize;
 
 						dataReceived?.Invoke(this, readSize);
 						BeginRead(dataReceived, disconnected);
@@ -268,6 +274,8 @@ namespace SimpleTcp.Server
 					if(networkStream.CanWrite)
 					{
 						networkStream.Write(buffer, offset, count);
+                        networkStream.Flush();
+                        SendBytes += count;
 					}
 				}
 			}
