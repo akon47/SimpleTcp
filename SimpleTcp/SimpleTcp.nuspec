@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
-    <id>$id$</id>
-    <version>$version$</version>
-    <title>$title$</title>
-    <authors>$author$</authors>
+    <id>SimpleTcpLib</id>
+    <version>1.0.0</version>
+    <title>SimpleTcp</title>
+    <authors>Kim Hwan</authors>
+    <owners>Kim Hwan</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/akon47/SimpleTcp</projectUrl>
-    <iconUrl>http://icon_url_here_or_delete_this_line/</iconUrl>
-    <description>$description$</description>
-    <releaseNotes>First release.</releaseNotes>
-    <copyright>$copyright$</copyright>
+    <iconUrl>https://raw.githubusercontent.com/akon47/SimpleTcp/master/SimpleTcp/logo.png</iconUrl>
+    <description>A simple-to-use TCP server and client library.</description>
+    <releaseNotes>First release</releaseNotes>
+    <copyright>Copyright 2021</copyright>
     <tags>SimpleTcp Client Server Socket</tags>
   </metadata>
 </package>
