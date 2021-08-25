@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoServer", "Examples\EchoServer\EchoServer.csproj", "{38FAEFC3-5D26-4173-9C61-56B7898D63E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoClient", "EchoClient\EchoClient.csproj", "{F6913AAE-9C83-46ED-BA8C-E0B74607A133}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoClient", "Examples\EchoClient\EchoClient.csproj", "{F6913AAE-9C83-46ED-BA8C-E0B74607A133}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
