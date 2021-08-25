@@ -10,8 +10,10 @@ static void Main(string[] args)
 {
     using (RawTcpServer tcpServer = new RawTcpServer())
     {
-        tcpServer.ClientConnected += (sender, e) => Console.WriteLine($"[{e.Client}]: Connected"); // new client connected
-        tcpServer.ClientDisconnected += (sender, e) => Console.WriteLine($"[{e.Client}]: Disconnected"); // client disconnected
+        tcpServer.ClientConnected += (sender, e) =>
+            Console.WriteLine($"[{e.Client}]: Connected"); // new client connected
+        tcpServer.ClientDisconnected += (sender, e) =>
+            Console.WriteLine($"[{e.Client}]: Disconnected"); // client disconnected
         tcpServer.DataReceived += (sender, e) =>
         {
             byte[] readBytes = e.Client.ReadExisting(); // read all data
@@ -46,8 +48,10 @@ static void Main(string[] args)
 {
     using (RawTcpClient tcpClient = new RawTcpClient())
     {
-        tcpClient.Connected += (sender, e) => Console.WriteLine($"Connect to [{e.RemoteEndPoint}]");
-        tcpClient.Disconnected += (sender, e) => Console.WriteLine($"{Environment.NewLine}Disconnected from [{e.RemoteEndPoint}]");
+        tcpClient.Connected += (sender, e) =>
+            Console.WriteLine($"Connect to [{e.RemoteEndPoint}]");
+        tcpClient.Disconnected += (sender, e) =>
+            Console.WriteLine($"{Environment.NewLine}Disconnected from [{e.RemoteEndPoint}]");
         tcpClient.DataReceived += (sender, e) =>
         {
             if (sender is RawTcpClient rawTcpClient)
