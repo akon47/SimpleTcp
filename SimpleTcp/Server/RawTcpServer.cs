@@ -53,10 +53,21 @@ namespace SimpleTcp.Server
 		public event ClientConnectedHandler ClientConnected;
 		public event ClientDisconnectedHandler ClientDisconnected;
 		public event DataReceivedEventHandler DataReceived;
-		#endregion
+        #endregion
 
-		#region Public Methods
-		public void Start(int port)
+        #region Public Methods
+
+        #region Constructor
+        public RawTcpServer(int port = -1)
+        {
+            if(port > 0)
+            {
+                Start(port);
+            }
+        }
+        #endregion
+
+        public void Start(int port)
 		{
             lock (syncObject)
             {

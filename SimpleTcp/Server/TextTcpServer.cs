@@ -17,10 +17,13 @@ namespace SimpleTcp.Server
         private bool _leaveOpen;
         #endregion
 
-        #region Public Methods
+        #region Public Members
         public event TextReceivedEventHandler TextReceived;
         #endregion
 
+        #region Public Methods
+
+        #region Constructor
         public TextTcpServer(RawTcpServer rawTcpServer) : this(rawTcpServer, Encoding.UTF8) { }
 
         public TextTcpServer(RawTcpServer rawTcpServer, Encoding encoding, bool leaveOpen = false)
@@ -34,17 +37,21 @@ namespace SimpleTcp.Server
 
             rawTcpServer.DataReceived += RawTcpServer_DataReceived;
         }
-
-        private void RawTcpServer_DataReceived(object sender, DataReceivedEventArgs e)
-        {
-            
-        }
+        #endregion
 
         public virtual void Stop()
         {
             Dispose(true);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        #endregion
+
+        #region Protected Methods
         protected virtual void Dispose(bool disposing)
         {
             if(disposing)
@@ -56,10 +63,13 @@ namespace SimpleTcp.Server
                 }
             }
         }
+        #endregion
 
-        public void Dispose()
+        #region Private Methods
+        private void RawTcpServer_DataReceived(object sender, DataReceivedEventArgs e)
         {
-            Dispose(true);
+            
         }
+        #endregion
     }
 }

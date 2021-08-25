@@ -43,6 +43,16 @@ namespace SimpleTcp.Client
 
 
         #region Public Methods
+        #region Constructor
+        public RawTcpClient(string host = null, int port = -1, int timeout = 3000)
+        {
+            if(string.IsNullOrWhiteSpace(host) && port > 0)
+            {
+                Connect(host, port, timeout);
+            }
+        }
+        #endregion
+
         public void Connect(string host, int port, int timeout = 3000)
         {
             lock (syncObject)
