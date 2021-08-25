@@ -56,30 +56,39 @@ namespace SimpleTcp.Server
 		#region Public Methods
 		public void Start(int port)
 		{
-			tcpListener = new TcpListener(IPAddress.Any, port);
-			try
-			{
-				tcpListener.Start();
-				tcpListener.BeginAcceptTcpClient(new AsyncCallback(AcceptTcpClientCallback), tcpListener);
-			}
-			catch(Exception e)
-			{
-				tcpListener?.Stop();
-				tcpListener = null;
-				throw e;
-			}
+            lock (syncObject)
+            {
+                if (IsStarted)
+                {
+                    throw new InvalidOperationException("already started");
+                }
+
+                tcpListener = new TcpListener(IPAddress.Any, port);
+                try
+                {
+                    tcpListener.Start();
+                    tcpListener.BeginAcceptTcpClient(new AsyncCallback(AcceptTcpClientCallback), tcpListener);
+                }
+                catch (Exception e)
+                {
+                    tcpListener?.Stop();
+                    tcpListener = null;
+                    throw e;
+                }
+            }
 		}
 
 		public void Stop()
 		{
-			tcpListener?.Stop();
-			tcpListener = null;
+            lock (syncObject)
+            {
+                tcpListener?.Stop();
+                tcpListener = null;
 
-			lock(syncObject)
-			{
-				connections?.ForEach(client => client.TcpClient?.Client?.Disconnect(false));
-				connections?.Clear();
-			}
+
+                connections?.ForEach(client => client.TcpClient?.Client?.Disconnect(false));
+                connections?.Clear();
+            }
 		}
 
 		public virtual void Dispose()
@@ -243,9 +252,7 @@ namespace SimpleTcp.Server
 
 			public byte[] ReadExisting()
 			{
-				byte[] buffer = new byte[ringBuffer.Count];
-				ringBuffer.Read(buffer, 0, buffer.Length);
-				return buffer;
+                return ringBuffer.ReadExisting();
 			}
 
 			public int ReadByte()

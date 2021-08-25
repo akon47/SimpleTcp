@@ -124,6 +124,21 @@ namespace SimpleTcp.Utils
 			}
 		}
 
+        public byte[] ReadExisting()
+        {
+            int count = Count;
+            if (count > 0)
+            {
+                byte[] buffer = new byte[count];
+                Read(buffer, 0, buffer.Length);
+                return buffer;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 		public int MaxLength => buffer.Length;
 		public int Count
 		{
