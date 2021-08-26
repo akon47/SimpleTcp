@@ -17,6 +17,20 @@ namespace SimpleTcp.Server
 		public event DataReceivedEventHandler DataReceived;
         #endregion
 
+        #region Public Methods
+
+        #region Constructor
+        public RawTcpServer(int port = -1)
+        {
+            if(port > 0)
+            {
+                base.Start(port);
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Protected Methods
         protected override void OnClientConnected(IClient client)
         {

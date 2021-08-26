@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\BaseTcpClient.cs" />
     <Compile Include="Client\RawTcpClient.cs" />
     <Compile Include="Client\RawTcpClientEvent.cs" />
     <Compile Include="Client\TextTcpClient.cs" />

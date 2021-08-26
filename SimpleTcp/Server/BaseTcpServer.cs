@@ -50,17 +50,6 @@ namespace SimpleTcp.Server
 		#endregion
 
         #region Public Methods
-
-        #region Constructor
-        public BaseTcpServer(int port = -1)
-        {
-            if(port > 0)
-            {
-                Start(port);
-            }
-        }
-        #endregion
-
         public void Start(int port)
 		{
             lock (syncObject)
