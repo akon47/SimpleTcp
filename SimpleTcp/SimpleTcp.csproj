@@ -44,14 +44,12 @@
     <Compile Include="Client\BaseTcpClient.cs" />
     <Compile Include="Client\RawTcpClient.cs" />
     <Compile Include="Client\RawTcpClientEvent.cs" />
-    <Compile Include="Client\TextTcpClient.cs" />
     <Compile Include="Server\IClient.cs" />
     <Compile Include="Server\BaseTcpServer.cs" />
+    <Compile Include="Server\PacketTcpServer.cs" />
     <Compile Include="Server\RawTcpServer.cs" />
     <Compile Include="Server\RawTcpServerEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server\TextTcpServer.cs" />
-    <Compile Include="Server\TextTcpServerEvent.cs" />
     <Compile Include="Utils\RingBuffer.cs" />
     <Compile Include="Utils\SocketUtils.cs" />
   </ItemGroup>
