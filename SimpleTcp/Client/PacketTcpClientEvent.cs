@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleTcp.Server
+namespace SimpleTcp.Client
 {
-	public class PacketReceivedEventArgs : EventArgs
+    public class PacketReceivedEventArgs : EventArgs
 	{
-		public IPacket Packet { get; private set; }
+		public byte[] PacketData { get; private set; }
 
-		public PacketReceivedEventArgs(IPacket packet)
+		public PacketReceivedEventArgs(byte[] packetData)
 		{
-			Packet = packet;
+			PacketData = packetData;
 		}
 	}
 	public delegate void PacketReceivedEventHandler(object sender, PacketReceivedEventArgs e);

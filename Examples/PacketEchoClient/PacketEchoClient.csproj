@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E8130B7F-ACA9-4A90-B257-171DE7430D59}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleTcp</RootNamespace>
-    <AssemblyName>SimpleTcp</AssemblyName>
+    <ProjectGuid>{92E34B03-9E20-425A-916C-C9E3468337E0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PacketEchoClient</RootNamespace>
+    <AssemblyName>PacketEchoClient</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,29 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\BaseTcpClient.cs" />
-    <Compile Include="Client\BaseTcpClientEvent.cs" />
-    <Compile Include="Client\PacketTcpClient.cs" />
-    <Compile Include="Client\PacketTcpClientEvent.cs" />
-    <Compile Include="Client\RawTcpClient.cs" />
-    <Compile Include="Client\RawTcpClientEvent.cs" />
-    <Compile Include="Server\BaseTcpServerEvent.cs" />
-    <Compile Include="Server\IClient.cs" />
-    <Compile Include="Server\BaseTcpServer.cs" />
-    <Compile Include="Server\IPacket.cs" />
-    <Compile Include="Server\PacketTcpServer.cs" />
-    <Compile Include="Server\PacketTcpServerEvent.cs" />
-    <Compile Include="Server\RawTcpServer.cs" />
-    <Compile Include="Server\RawTcpServerEvent.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\RingBuffer.cs" />
-    <Compile Include="Utils\SocketUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".editorconfig" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="logo.png" />
+    <ProjectReference Include="..\..\SimpleTcp\SimpleTcp.csproj">
+      <Project>{e8130b7f-aca9-4a90-b257-171de7430d59}</Project>
+      <Name>SimpleTcp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

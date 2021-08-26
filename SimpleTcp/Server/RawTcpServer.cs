@@ -18,13 +18,7 @@ namespace SimpleTcp.Server
         #region Public Methods
 
         #region Constructor
-        public RawTcpServer(int port = -1)
-        {
-            if(port > 0)
-            {
-                base.Start(port);
-            }
-        }
+        public RawTcpServer(int port = -1) : base(port) { }
         #endregion
 
         #endregion
