@@ -13,7 +13,9 @@ namespace SimpleTcp.Server
 		TcpClient TcpClient { get; }
 		IPEndPoint IPEndPoint { get; }
 		int BytesToRead { get; }
-		int DropBytes { get; }
+		long DropBytes { get; }
+        long SendBytes { get; }
+        long ReceiveBytes { get; }
 		int Read(byte[] buffer, int offset, int count);
 		byte[] ReadExisting();
 		int ReadByte();
