@@ -38,7 +38,14 @@ namespace SimpleTcp.Client
         #endregion
 
         #region Public Member
+        /// <summary>
+        /// Called when connecting to the server.
+        /// </summary>
 		public event ConnectedHandler Connected;
+
+        /// <summary>
+        /// Called when the connection with the server is lost.
+        /// </summary>
 		public event DisconnectedHandler Disconnected;
         #endregion
 

@@ -12,11 +12,21 @@ namespace SimpleTcp.Client
     public class RawTcpClient : BaseTcpClient
     {
         #region Public Member
+        /// <summary>
+        /// Called when data is received.
+        /// </summary>
         public event DataReceivedEventHandler DataReceived;
         #endregion
 
         #region Public Methods
         #region Constructor
+
+        /// <summary>
+        /// RawTcpClient
+        /// </summary>
+        /// <param name="host">The name of the remote host</param>
+        /// <param name="port">The port number of the remote host</param>
+        /// <param name="timeout">connection timeout (ms)</param>
         public RawTcpClient(string host = null, int port = -1, int timeout = 3000) : base(host, port, timeout) { }
         #endregion
 
@@ -30,6 +40,11 @@ namespace SimpleTcp.Client
             return base.ReadExisting();
         }
 
+        /// <summary>
+        /// If exist return readed byte
+        /// If not exist return -1
+        /// </summary>
+        /// <returns></returns>
         new public int ReadByte()
         {
             return base.ReadByte();

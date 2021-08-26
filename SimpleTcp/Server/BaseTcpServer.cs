@@ -36,7 +36,15 @@ namespace SimpleTcp.Server
         /// </summary>
         public int Port { get => (tcpListener?.LocalEndpoint as IPEndPoint)?.Port ?? -1; }
 
-        public long TotalReceiveBytes { get; private set; }
+        /// <summary>
+        /// Get Total received bytes count
+        /// </summary>
+        public long TotalReceivedBytes { get; private set; }
+
+        /// <summary>
+        /// Get Total sended bytes count
+        /// </summary>
+        public long TotalSendedBytes { get; private set; }
 		#endregion
 
 		#region Private Member
@@ -50,12 +58,24 @@ namespace SimpleTcp.Server
 		#endregion
 
         #region Public Member
+        /// <summary>
+        /// Client connected event handler
+        /// </summary>
 		public event ClientConnectedHandler ClientConnected;
+
+        /// <summary>
+        /// Client disconnected event handler
+        /// </summary>
 		public event ClientDisconnectedHandler ClientDisconnected;
         #endregion
 
         #region Public Methods
         #region Constructor
+
+        /// <summary>
+        /// BaseTcpServer
+        /// </summary>
+        /// <param name="port">If you specify a valid port, the server starts immediately.</param>
         public BaseTcpServer(int port = -1)
         {
             if(port > 0)
@@ -65,6 +85,10 @@ namespace SimpleTcp.Server
         }
         #endregion
 
+        /// <summary>
+        /// Start tcp server
+        /// </summary>
+        /// <param name="port">Server port</param>
         public void Start(int port)
 		{
             lock (syncObject)
@@ -89,6 +113,9 @@ namespace SimpleTcp.Server
             }
 		}
 
+        /// <summary>
+        /// Stop tcp server
+        /// </summary>
 		public void Stop()
 		{
             lock (syncObject)
@@ -137,7 +164,7 @@ namespace SimpleTcp.Server
 				TcpClient tcpClient = tcpListener.EndAcceptTcpClient(ar);
 				if(tcpClient != null) // new client connected
 				{
-					Connection connection = new Connection(tcpClient);
+					Connection connection = new Connection(this, tcpClient);
 					lock(syncObject)
 					{
 						connections.Add(connection);
@@ -185,22 +212,20 @@ namespace SimpleTcp.Server
 
 		private void DataReceivedCallback(Connection connection, int receivedSize)
 		{
-            TotalReceiveBytes += receivedSize;
+            TotalReceivedBytes += receivedSize;
 			OnDataReceived(connection, receivedSize);
 		}
 		#endregion
-		
 
 		protected class Connection : IClient
 		{
 			#region Properties
 			public TcpClient TcpClient { get; private set; }
 			public IPEndPoint IPEndPoint { get => TcpClient?.Client?.RemoteEndPoint as IPEndPoint; }
-			public NetworkStream NetworkStream { get { try { return TcpClient?.GetStream(); } catch { return null; } } }
 
-			public int BytesToRead { get => ringBuffer.Count; }
+			public int BytesToRead { get => _ringBuffer.Count; }
 			public long DropBytes { get; private set; } = 0;
-            public long SendBytes { get; private set; } = 0;
+            public long SendedBytes { get; private set; } = 0;
             public long ReceivedBytes { get; private set; } = 0;
 			#endregion
 
@@ -209,69 +234,77 @@ namespace SimpleTcp.Server
 
 			#region Private Members
 			private object syncObject = new object();
-			private byte[] buffer;
-			private RingBuffer ringBuffer;
-			private DataReceivedCallback dataReceived;
-			private DisconnectedCallback disconnected;
+			private byte[] _buffer;
+			private RingBuffer _ringBuffer;
+			private DataReceivedCallback _dataReceived;
+			private DisconnectedCallback _disconnected;
+            private BaseTcpServer _baseTcpServer;
 			#endregion
 
-			public Connection(TcpClient tcpClient)
+			public Connection(BaseTcpServer baseTcpServer, TcpClient tcpClient)
 			{
 				TcpClient = tcpClient;
-				buffer = new byte[tcpClient.ReceiveBufferSize];
-				ringBuffer = new RingBuffer(tcpClient.ReceiveBufferSize);
+				_buffer = new byte[tcpClient.ReceiveBufferSize];
+				_ringBuffer = new RingBuffer(tcpClient.ReceiveBufferSize);
+                _baseTcpServer = baseTcpServer;
 			}
 
 			public void BeginRead(DataReceivedCallback dataReceivedCallback, DisconnectedCallback disconnectedCallback)
 			{
-				dataReceived = dataReceivedCallback;
-				disconnected = disconnectedCallback;
-				NetworkStream?.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(ReadCallback), this);
+				_dataReceived = dataReceivedCallback;
+				_disconnected = disconnectedCallback;
+                try
+                {
+                    TcpClient?.GetStream()?.BeginRead(_buffer, 0, _buffer.Length, new AsyncCallback(ReadCallback), this);
+                }
+                catch
+                {
+                    _disconnected?.Invoke(this);
+                }
 			}
 
 			private void ReadCallback(IAsyncResult ar)
 			{
 				if (ar.AsyncState is Connection connection)
 				{
-					int readSize = 0;
+					int readSize;
 					try
 					{
-						readSize = connection.NetworkStream?.EndRead(ar) ?? 0;
+						readSize = connection.TcpClient.GetStream()?.EndRead(ar) ?? 0;
 					}
-					catch { }
+					catch { readSize = 0; }
 
 					if (readSize == 0) // client disconnected when readSize is zero
 					{
-						disconnected?.Invoke(this);
+						_disconnected?.Invoke(this);
 					}
 					else
 					{
-						int writeBytes = ringBuffer.Write(buffer, 0, readSize);
+						int writeBytes = _ringBuffer.Write(_buffer, 0, readSize);
 						if(writeBytes < readSize)
 						{
 							DropBytes += (readSize - writeBytes);
 						}
                         ReceivedBytes += readSize;
-
-						dataReceived?.Invoke(this, readSize);
-						BeginRead(dataReceived, disconnected);
+						_dataReceived?.Invoke(this, readSize);
+						BeginRead(_dataReceived, _disconnected);
 					}
 				}
 			}
 
 			public int Read(byte[] buffer, int offset, int count)
 			{
-				return ringBuffer.Read(buffer, offset, count);
+				return _ringBuffer.Read(buffer, offset, count);
 			}
 
 			public byte[] ReadExisting()
 			{
-                return ringBuffer.ReadExisting();
+                return _ringBuffer.ReadExisting();
 			}
 
 			public int ReadByte()
 			{
-				return ringBuffer.ReadByte();
+				return _ringBuffer.ReadByte();
 			}
 
 			public void Write(byte[] buffer, int offset, int count)
@@ -280,18 +313,19 @@ namespace SimpleTcp.Server
                 {
                     lock (syncObject)
                     {
-                        NetworkStream networkStream = NetworkStream;
+                        NetworkStream networkStream = TcpClient?.GetStream();
                         if (networkStream.CanWrite)
                         {
                             networkStream.Write(buffer, offset, count);
                             networkStream.Flush();
-                            SendBytes += count;
+                            SendedBytes += count;
+                            _baseTcpServer.TotalSendedBytes += count;
                         }
                     }
                 }
                 catch
                 {
-                    disconnected?.Invoke(this);
+                    _disconnected?.Invoke(this);
                 }
 			}
 
