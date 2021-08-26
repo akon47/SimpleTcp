@@ -5,8 +5,37 @@
   <img alt="Nuget downloads" src="https://img.shields.io/nuget/dt/SimpleTcpLib">
   <img alt="GitHub starts" src="https://img.shields.io/github/stars/akon47/SimpleTcp">
 </p>
-A simple-to-use TCP server and client library.
+A simple-to-use TCP server and client library.   
 
+## Usage
+
+### Start Tcp Server
+```csharp
+RawTcpServer tcpServer = new RawTcpServer();
+tcpServer.Start(5000);
+```
+
+### Can use Event Handlers
+```csharp
+RawTcpServer tcpServer = new RawTcpServer();
+tcpServer.ClientConnected += ClientConnected;
+tcpServer.ClientDisconnected += ClientDisconnected;
+tcpServer.DataReceived += DataReceived;
+```
+
+### Connect to Tcp Server
+```csharp
+RawTcpClient tcpClient = new RawTcpClient();
+tcpClient.Connect("127.0.0.1", 5000);
+```
+
+### Can use Event Handlers
+```csharp
+RawTcpClient tcpClient = new RawTcpClient();
+tcpClient.Connected += Connected;
+tcpClient.Disconnected += Disconnected;
+tcpClient.DataReceived += DataReceived;
+```
 
 ## Examples
 
