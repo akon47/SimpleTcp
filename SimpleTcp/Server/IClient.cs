@@ -33,7 +33,7 @@ namespace SimpleTcp.Server
         /// <summary>
         /// Get the total number of bytes sent to that client.
         /// </summary>
-        long SendBytes { get; }
+        long SendedBytes { get; }
 
         /// <summary>
         /// Get the total number of bytes received from the client.
