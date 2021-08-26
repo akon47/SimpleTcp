@@ -21,6 +21,15 @@ namespace SimpleTcp.Server
         public RawTcpServer(int port = -1) : base(port) { }
         #endregion
 
+        public void Write(TcpClient tcpClient, byte[] buffer, int offset, int count)
+        {
+            base.GetClient(tcpClient)?.Write(buffer, offset, count);
+        }
+
+        new public void WriteToAllClients(byte[] buffer, int offset, int count)
+        {
+            base.WriteToAllClients(buffer, offset, count);
+        }
         #endregion
 
         #region Protected Methods
