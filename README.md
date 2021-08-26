@@ -17,9 +17,9 @@ static void Main(string[] args)
     using (RawTcpServer tcpServer = new RawTcpServer())
     {
         tcpServer.ClientConnected += (sender, e) =>
-            Console.WriteLine($"[{e.Client}]: Connected"); // new client connected
+            Console.WriteLine($"[{e}]: Connected"); // new client connected
         tcpServer.ClientDisconnected += (sender, e) =>
-            Console.WriteLine($"[{e.Client}]: Disconnected"); // client disconnected
+            Console.WriteLine($"[{e}]: Disconnected"); // client disconnected
         tcpServer.DataReceived += (sender, e) =>
         {
             byte[] readBytes = e.Client.ReadExisting(); // read all data
@@ -83,6 +83,78 @@ static void Main(string[] args)
             Console.WriteLine(ex);
             Console.ReadLine();
         }
+    }
+}
+```
+
+### Packet Echo Server
+The size of the transmitted and received data is transmitted/received without being cut off.
+```csharp
+static void Main(string[] args)
+{
+  using (PacketTcpServer tcpServer = new PacketTcpServer())
+  {
+      tcpServer.ClientConnected += (sender, e) =>
+          Console.WriteLine($"[{e}]: Connected"); // new client connected
+      tcpServer.ClientDisconnected += (sender, e) =>
+          Console.WriteLine($"[{e}]: Disconnected"); // client disconnected
+      tcpServer.PacketReceived += (sender, e) =>
+      {
+          if (sender is PacketTcpServer packetTcpServer)
+          {
+              Console.WriteLine($"[{e.Packet.IPEndPoint}]: PacketReceived (PacketLength: {e.Packet.PacketData.Length})");
+              packetTcpServer.WritePacket(e.Packet.TcpClient, e.Packet.PacketData); // return same packet
+          }
+      };
+
+      try
+      {
+          tcpServer.Start(5000);
+          Console.WriteLine("Listening for connections...");
+      }
+      catch (Exception ex)
+      {
+          Console.WriteLine(ex);
+      }
+
+      Console.ReadLine();
+  }
+}
+```
+
+### Packet Echo Client
+```csharp
+static void Main(string[] args)
+{
+    using (PacketTcpClient tcpClient = new PacketTcpClient())
+    {
+        tcpClient.Connected += (sender, e) =>
+            Console.WriteLine($"Connect to [{e.RemoteEndPoint}]");
+        tcpClient.Disconnected += (sender, e) =>
+            Console.WriteLine($"{Environment.NewLine}Disconnected from [{e.RemoteEndPoint}]");
+        tcpClient.PacketReceived += (sender, e) =>
+        {
+            Console.WriteLine($"PacketReceived: (PacketLength: {e.PacketData.Length})");
+        };
+
+        try
+        {
+            tcpClient.Connect("127.0.0.1", 5000);
+
+            tcpClient.WritePacket(new byte[1024]); // send 1024 bytes
+            tcpClient.WritePacket(new byte[1024 * 1024]); // send 1024 * 1024 bytes
+            tcpClient.WritePacket(new byte[1024 * 1024 * 10]); // send 1024 * 1024 * 10 bytes
+
+            Console.ReadLine();
+
+            tcpClient.Disconnect();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        Console.ReadLine();
     }
 }
 ```
