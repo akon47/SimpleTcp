@@ -45,6 +45,7 @@
     <Compile Include="Client\RawTcpClientEvent.cs" />
     <Compile Include="Client\TextTcpClient.cs" />
     <Compile Include="Server\IClient.cs" />
+    <Compile Include="Server\BaseTcpServer.cs" />
     <Compile Include="Server\RawTcpServer.cs" />
     <Compile Include="Server\RawTcpServerEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
