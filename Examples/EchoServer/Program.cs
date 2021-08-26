@@ -14,9 +14,9 @@ namespace EchoServer
             using (RawTcpServer tcpServer = new RawTcpServer())
             {
                 tcpServer.ClientConnected += (sender, e) =>
-                    Console.WriteLine($"[{e.Client}]: Connected"); // new client connected
+                    Console.WriteLine($"[{e}]: Connected"); // new client connected
                 tcpServer.ClientDisconnected += (sender, e) =>
-                    Console.WriteLine($"[{e.Client}]: Disconnected"); // client disconnected
+                    Console.WriteLine($"[{e}]: Disconnected"); // client disconnected
                 tcpServer.DataReceived += (sender, e) =>
                 {
                     byte[] readBytes = e.Client.ReadExisting(); // read all data

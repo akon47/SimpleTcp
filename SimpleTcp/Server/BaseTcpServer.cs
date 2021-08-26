@@ -49,6 +49,11 @@ namespace SimpleTcp.Server
 		
 		#endregion
 
+        #region Public Member
+		public event ClientConnectedHandler ClientConnected;
+		public event ClientDisconnectedHandler ClientDisconnected;
+        #endregion
+
         #region Public Methods
         public void Start(int port)
 		{
@@ -135,6 +140,7 @@ namespace SimpleTcp.Server
 							new Connection.DataReceivedCallback(DataReceivedCallback),
 							new Connection.DisconnectedCallback(DisconnectedCallback));
 						OnClientConnected(connection);
+                        ClientConnected?.Invoke(this, new ClientConnectedEventArgs(connection));
 					}
 					catch
 					{
@@ -164,6 +170,7 @@ namespace SimpleTcp.Server
 				}
 			}
 			OnClientDisconnected(connection);
+            ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(connection));
 			
 		}
 
@@ -185,7 +192,7 @@ namespace SimpleTcp.Server
 			public int BytesToRead { get => ringBuffer.Count; }
 			public long DropBytes { get; private set; } = 0;
             public long SendBytes { get; private set; } = 0;
-            public long ReceiveBytes { get; private set; } = 0;
+            public long ReceivedBytes { get; private set; } = 0;
 			#endregion
 
 			public delegate void DataReceivedCallback(Connection connection, int receivedSize);
@@ -235,7 +242,7 @@ namespace SimpleTcp.Server
 						{
 							DropBytes += (readSize - writeBytes);
 						}
-                        ReceiveBytes += readSize;
+                        ReceivedBytes += readSize;
 
 						dataReceived?.Invoke(this, readSize);
 						BeginRead(dataReceived, disconnected);
