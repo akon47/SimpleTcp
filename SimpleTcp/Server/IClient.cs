@@ -15,7 +15,7 @@ namespace SimpleTcp.Server
 		int BytesToRead { get; }
 		long DropBytes { get; }
         long SendBytes { get; }
-        long ReceiveBytes { get; }
+        long ReceivedBytes { get; }
 		int Read(byte[] buffer, int offset, int count);
 		byte[] ReadExisting();
 		int ReadByte();

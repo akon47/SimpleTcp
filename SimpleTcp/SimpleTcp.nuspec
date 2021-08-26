@@ -11,7 +11,7 @@
         <projectUrl>https://github.com/akon47/SimpleTcp</projectUrl>
         <iconUrl>https://raw.githubusercontent.com/akon47/SimpleTcp/master/SimpleTcp/logo.png</iconUrl>
         <description>A simple-to-use TCP server and client library.</description>
-        <releaseNotes>Add TextTcpServer/Client</releaseNotes>
+        <releaseNotes>Add PacketTcpServer/Client</releaseNotes>
         <copyright>Copyright 2021</copyright>
         <tags>SimpleTcp Tcp Client Server Socket</tags>
         <dependencies>

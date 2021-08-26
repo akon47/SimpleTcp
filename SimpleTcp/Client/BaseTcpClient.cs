@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -33,9 +34,26 @@ namespace SimpleTcp.Client
         private TcpClient tcpClient;
         private byte[] buffer;
         private RingBuffer ringBuffer;
+        private IPEndPoint remoteEndPoint;
+        #endregion
+
+        #region Public Member
+		public event ConnectedHandler Connected;
+		public event DisconnectedHandler Disconnected;
         #endregion
 
         #region Public Methods
+
+        #region Constructor
+        public BaseTcpClient(string host = null, int port = -1, int timeout = 3000)
+        {
+            if(string.IsNullOrWhiteSpace(host) && port > 0)
+            {
+                Connect(host, port, timeout);
+            }
+        }
+        #endregion
+
         public void Connect(string host, int port, int timeout = 3000)
         {
             lock (syncObject)
@@ -65,27 +83,22 @@ namespace SimpleTcp.Client
             }
         }
 
-        public int Read(byte[] buffer, int offset, int count)
+        protected int Read(byte[] buffer, int offset, int count)
         {
             return ringBuffer.Read(buffer, offset, count);
         }
 
-        public byte[] ReadExisting()
+        protected byte[] ReadExisting()
         {
             return ringBuffer.ReadExisting();
         }
 
-        public int ReadByte()
+        protected int ReadByte()
         {
             return ringBuffer.ReadByte();
         }
 
-        public virtual void Dispose()
-		{
-            Disconnect();
-		}
-
-        public void Write(byte[] buffer, int offset, int count)
+        protected void Write(byte[] buffer, int offset, int count)
         {
             lock (syncObject)
             {
@@ -108,6 +121,11 @@ namespace SimpleTcp.Client
                 ringBuffer = null;
             }
         }
+
+        public virtual void Dispose()
+		{
+            Disconnect();
+		}
         #endregion
 
         #region Protected Methods
@@ -126,6 +144,8 @@ namespace SimpleTcp.Client
                     if (tcpClient.Client?.Connected ?? false)
                     {
                         OnConnected(tcpClient);
+                        Connected?.Invoke(this, new ConnectedEventArgs(tcpClient));
+                        remoteEndPoint = tcpClient?.Client?.RemoteEndPoint as IPEndPoint;
 
                         buffer = new byte[tcpClient.ReceiveBufferSize];
                         ringBuffer = new RingBuffer(tcpClient.ReceiveBufferSize);
@@ -141,11 +161,12 @@ namespace SimpleTcp.Client
         {
             if (ar?.AsyncState is TcpClient tcpClient)
             {
-                NetworkStream networkStream = tcpClient.GetStream();
+                NetworkStream networkStream = null;
 
                 int readSize = 0;
                 try
                 {
+                    networkStream = tcpClient.GetStream();
                     readSize = networkStream?.EndRead(ar) ?? 0;
                 }
                 catch { }
@@ -153,6 +174,7 @@ namespace SimpleTcp.Client
                 if (readSize == 0) // disconnected when readSize is zero
                 {
                     OnDisconnected(tcpClient);
+                    Disconnected?.Invoke(this, new DisconnectedEventArgs(remoteEndPoint));
                 }
                 else
                 {

@@ -8,31 +8,6 @@ using System.Threading.Tasks;
 
 namespace SimpleTcp.Client
 {
-    public class ConnectedEventArgs : EventArgs
-	{
-		public IPEndPoint RemoteEndPoint { get; private set; }
-
-        public ConnectedEventArgs(TcpClient tcpClient)
-        {
-            RemoteEndPoint = tcpClient?.Client?.RemoteEndPoint as IPEndPoint;
-        }
-	}
-
-	public delegate void ConnectedHandler(object sender, ConnectedEventArgs e);
-
-
-	public class DisconnectedEventArgs : EventArgs
-	{
-		public IPEndPoint RemoteEndPoint { get; private set; }
-
-        public DisconnectedEventArgs(TcpClient tcpClient)
-        {
-            RemoteEndPoint = tcpClient?.Client?.RemoteEndPoint as IPEndPoint;
-        }
-	}
-
-	public delegate void DisconnectedHandler(object sender, DisconnectedEventArgs e);
-
 	public class DataReceivedEventArgs : EventArgs
 	{
 		public int ReceivedBytes { get; private set; }

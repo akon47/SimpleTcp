@@ -9,37 +9,39 @@ using SimpleTcp.Utils;
 
 namespace SimpleTcp.Client
 {
-	public class RawTcpClient : BaseTcpClient
-	{
+    public class RawTcpClient : BaseTcpClient
+    {
         #region Public Member
-		public event ConnectedHandler Connected;
-		public event DisconnectedHandler Disconnected;
-		public event DataReceivedEventHandler DataReceived;
+        public event DataReceivedEventHandler DataReceived;
         #endregion
 
         #region Public Methods
         #region Constructor
-        public RawTcpClient(string host = null, int port = -1, int timeout = 3000)
-        {
-            if(string.IsNullOrWhiteSpace(host) && port > 0)
-            {
-                Connect(host, port, timeout);
-            }
-        }
+        public RawTcpClient(string host = null, int port = -1, int timeout = 3000) : base(host, port, timeout) { }
         #endregion
+
+        new public int Read(byte[] buffer, int offset, int count)
+        {
+            return base.Read(buffer, offset, count);
+        }
+
+        new public byte[] ReadExisting()
+        {
+            return base.ReadExisting();
+        }
+
+        new public int ReadByte()
+        {
+            return base.ReadByte();
+        }
+
+        new public void Write(byte[] buffer, int offset, int count)
+        {
+            base.Write(buffer, offset, count);
+        }
         #endregion
 
         #region Protected Methods
-        protected override void OnConnected(TcpClient tcpClient)
-        {
-            Connected?.Invoke(this, new ConnectedEventArgs(tcpClient));
-        }
-
-        protected override void OnDisconnected(TcpClient tcpClient)
-        {
-            Disconnected?.Invoke(this, new DisconnectedEventArgs(tcpClient));
-        }
-
         protected override void OnDataReceived(TcpClient tcpClient, int receivedSize)
         {
             DataReceived?.Invoke(this, new DataReceivedEventArgs(receivedSize));

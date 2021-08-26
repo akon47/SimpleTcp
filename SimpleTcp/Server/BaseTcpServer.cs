@@ -49,7 +49,22 @@ namespace SimpleTcp.Server
 		
 		#endregion
 
+        #region Public Member
+		public event ClientConnectedHandler ClientConnected;
+		public event ClientDisconnectedHandler ClientDisconnected;
+        #endregion
+
         #region Public Methods
+        #region Constructor
+        public BaseTcpServer(int port = -1)
+        {
+            if(port > 0)
+            {
+                Start(port);
+            }
+        }
+        #endregion
+
         public void Start(int port)
 		{
             lock (syncObject)
@@ -81,7 +96,6 @@ namespace SimpleTcp.Server
                 tcpListener?.Stop();
                 tcpListener = null;
 
-
                 connections?.ForEach(client => client.TcpClient?.Client?.Disconnect(false));
                 connections?.Clear();
             }
@@ -92,7 +106,7 @@ namespace SimpleTcp.Server
 			Stop();
 		}
 
-		public IClient GetClient(TcpClient tcpClient)
+		protected IClient GetClient(TcpClient tcpClient)
 		{
 			lock(syncObject)
 			{
@@ -100,7 +114,7 @@ namespace SimpleTcp.Server
 			}
 		}
 
-		public void WriteToAllClients(byte[] buffer, int offset, int count)
+		protected void WriteToAllClients(byte[] buffer, int offset, int count)
 		{
 			Parallel.ForEach(connections, connection =>
 			{
@@ -135,6 +149,7 @@ namespace SimpleTcp.Server
 							new Connection.DataReceivedCallback(DataReceivedCallback),
 							new Connection.DisconnectedCallback(DisconnectedCallback));
 						OnClientConnected(connection);
+                        ClientConnected?.Invoke(this, new ClientConnectedEventArgs(connection));
 					}
 					catch
 					{
@@ -164,13 +179,14 @@ namespace SimpleTcp.Server
 				}
 			}
 			OnClientDisconnected(connection);
+            ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(connection));
 			
 		}
 
 		private void DataReceivedCallback(Connection connection, int receivedSize)
 		{
-			OnDataReceived(connection, receivedSize);
             TotalReceiveBytes += receivedSize;
+			OnDataReceived(connection, receivedSize);
 		}
 		#endregion
 		
@@ -180,12 +196,12 @@ namespace SimpleTcp.Server
 			#region Properties
 			public TcpClient TcpClient { get; private set; }
 			public IPEndPoint IPEndPoint { get => TcpClient?.Client?.RemoteEndPoint as IPEndPoint; }
-			public NetworkStream NetworkStream { get => TcpClient?.GetStream(); }
+			public NetworkStream NetworkStream { get { try { return TcpClient?.GetStream(); } catch { return null; } } }
 
 			public int BytesToRead { get => ringBuffer.Count; }
 			public long DropBytes { get; private set; } = 0;
             public long SendBytes { get; private set; } = 0;
-            public long ReceiveBytes { get; private set; } = 0;
+            public long ReceivedBytes { get; private set; } = 0;
 			#endregion
 
 			public delegate void DataReceivedCallback(Connection connection, int receivedSize);
@@ -235,7 +251,7 @@ namespace SimpleTcp.Server
 						{
 							DropBytes += (readSize - writeBytes);
 						}
-                        ReceiveBytes += readSize;
+                        ReceivedBytes += readSize;
 
 						dataReceived?.Invoke(this, readSize);
 						BeginRead(dataReceived, disconnected);
@@ -260,16 +276,23 @@ namespace SimpleTcp.Server
 
 			public void Write(byte[] buffer, int offset, int count)
 			{
-				lock(syncObject)
-				{
-					NetworkStream networkStream = NetworkStream;
-					if(networkStream.CanWrite)
-					{
-						networkStream.Write(buffer, offset, count);
-                        networkStream.Flush();
-                        SendBytes += count;
-					}
-				}
+                try
+                {
+                    lock (syncObject)
+                    {
+                        NetworkStream networkStream = NetworkStream;
+                        if (networkStream.CanWrite)
+                        {
+                            networkStream.Write(buffer, offset, count);
+                            networkStream.Flush();
+                            SendBytes += count;
+                        }
+                    }
+                }
+                catch
+                {
+                    disconnected?.Invoke(this);
+                }
 			}
 
 			public override string ToString()
