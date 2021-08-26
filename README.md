@@ -88,7 +88,7 @@ static void Main(string[] args)
 ```
 
 ### Packet Echo Server
-The size of the transmitted and received data is transmitted/received without being cut off.
+The size of the received data is received without being cut off.
 ```csharp
 static void Main(string[] args)
 {
