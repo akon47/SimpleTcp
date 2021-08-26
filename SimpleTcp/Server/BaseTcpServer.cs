@@ -50,12 +50,24 @@ namespace SimpleTcp.Server
 		#endregion
 
         #region Public Member
+        /// <summary>
+        /// Client connected event handler
+        /// </summary>
 		public event ClientConnectedHandler ClientConnected;
+
+        /// <summary>
+        /// Client disconnected event handler
+        /// </summary>
 		public event ClientDisconnectedHandler ClientDisconnected;
         #endregion
 
         #region Public Methods
         #region Constructor
+
+        /// <summary>
+        /// BaseTcpServer
+        /// </summary>
+        /// <param name="port">If you specify a valid port, the server starts immediately.</param>
         public BaseTcpServer(int port = -1)
         {
             if(port > 0)
@@ -65,6 +77,10 @@ namespace SimpleTcp.Server
         }
         #endregion
 
+        /// <summary>
+        /// Start tcp server
+        /// </summary>
+        /// <param name="port">Server port</param>
         public void Start(int port)
 		{
             lock (syncObject)
@@ -89,6 +105,9 @@ namespace SimpleTcp.Server
             }
 		}
 
+        /// <summary>
+        /// Stop tcp server
+        /// </summary>
 		public void Stop()
 		{
             lock (syncObject)

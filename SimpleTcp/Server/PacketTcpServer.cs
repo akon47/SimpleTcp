@@ -23,6 +23,10 @@ namespace SimpleTcp.Server
         #region Public Methods
 
         #region Constructor
+        /// <summary>
+        /// PacketTcpServer
+        /// </summary>
+        /// <param name="port">If you specify a valid port, the server starts immediately.</param>
         public PacketTcpServer(int port = -1) : base(port) { }
         #endregion
 
