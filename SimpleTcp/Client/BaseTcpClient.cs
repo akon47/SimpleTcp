@@ -121,8 +121,12 @@ namespace SimpleTcp.Client
         {
             lock(syncObject)
             {
-                tcpClient?.Close();
-                tcpClient = null;
+                try
+                {
+                    tcpClient?.Close();
+                    tcpClient = null;
+                }
+                catch { }
 
                 buffer = null;
                 ringBuffer = null;
