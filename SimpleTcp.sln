@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketEchoServer", "Example
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketEchoClient", "Examples\PacketEchoClient\PacketEchoClient.csproj", "{92E34B03-9E20-425A-916C-C9E3468337E0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{22A823CF-D395-453B-A646-8FBA40885188}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22A823CF-D395-453B-A646-8FBA40885188}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{B546AE60-F96C-48CD-830B-7FA3ABAE300A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "Tests\UnitTestProject\UnitTestProject.csproj", "{B546AE60-F96C-48CD-830B-7FA3ABAE300A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

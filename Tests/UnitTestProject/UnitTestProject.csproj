@@ -57,7 +57,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SimpleTcp\SimpleTcp.csproj">
+    <ProjectReference Include="..\..\SimpleTcp\SimpleTcp.csproj">
       <Project>{e8130b7f-aca9-4a90-b257-171de7430d59}</Project>
       <Name>SimpleTcp</Name>
     </ProjectReference>
