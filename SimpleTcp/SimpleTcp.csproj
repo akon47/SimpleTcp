@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/akon47/SimpleTcp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/akon47/SimpleTcp</RepositoryUrl>
     <PackageTags>SimpleTcp Tcp Client Server Socket</PackageTags>
-    <PackageReleaseNotes>Fixed an issue where an exception was thrown when the server/client was stoped if the server/client was already stoped.</PackageReleaseNotes>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
-    <Version>1.0.4</Version>
+    <PackageReleaseNotes>Fixed an issue where an exception was thrown in the server's Accept process when the server shuts down.</PackageReleaseNotes>
+    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <FileVersion>1.0.5.0</FileVersion>
+    <Version>1.0.5</Version>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <Authors>Kim Hwan</Authors>

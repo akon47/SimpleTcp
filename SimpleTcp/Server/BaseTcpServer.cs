@@ -167,7 +167,7 @@ namespace SimpleTcp.Server
         #region Private Methods
         private void AcceptTcpClientCallback(IAsyncResult ar)
         {
-            if (ar.AsyncState is TcpListener tcpListener)
+            if (ar.AsyncState is TcpListener tcpListener && tcpListener.Server.Connected)
             {
                 TcpClient tcpClient = tcpListener.EndAcceptTcpClient(ar);
                 if (tcpClient != null) // new client connected
