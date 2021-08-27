@@ -26,7 +26,17 @@ namespace SimpleTcp.Client
         /// <summary>
         /// DropBytes
         /// </summary>
-		public int DropBytes { get; private set; } = 0;
+		public long DropBytes { get; private set; } = 0;
+
+        /// <summary>
+        /// TotalReceivedBytes
+        /// </summary>
+		public long TotalReceivedBytes { get; private set; } = 0;
+
+        /// <summary>
+        /// TotalSendedBytes
+        /// </summary>
+		public long TotalSendedBytes { get; private set; } = 0;
         #endregion
 
         #region Private Member
@@ -113,6 +123,7 @@ namespace SimpleTcp.Client
                 if (networkStream.CanWrite)
                 {
                     networkStream.Write(buffer, offset, count);
+                    TotalSendedBytes += count;
                 }
             }
         }
@@ -196,6 +207,7 @@ namespace SimpleTcp.Client
                     }
 
                     OnDataReceived(tcpClient, readSize);
+                    TotalReceivedBytes += readSize;
                     networkStream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(ReadCallback), tcpClient);
                 }
             }
