@@ -167,40 +167,44 @@ namespace SimpleTcp.Server
         #region Private Methods
         private void AcceptTcpClientCallback(IAsyncResult ar)
         {
-            if (ar.AsyncState is TcpListener tcpListener && tcpListener.Server.Connected)
+            if (ar.AsyncState is TcpListener tcpListener)
             {
-                TcpClient tcpClient = tcpListener.EndAcceptTcpClient(ar);
-                if (tcpClient != null) // new client connected
+                try
                 {
-                    Connection connection = new Connection(this, tcpClient);
-                    lock (syncObject)
+                    TcpClient tcpClient = tcpListener.EndAcceptTcpClient(ar);
+                    if (tcpClient != null) // new client connected
                     {
-                        connections.Add(connection);
-                    }
-
-                    try
-                    {
-                        connection.BeginRead(
-                            new Connection.DataReceivedCallback(DataReceivedCallback),
-                            new Connection.DisconnectedCallback(DisconnectedCallback));
-                        OnClientConnected(connection);
-                        ClientConnected?.Invoke(this, new ClientConnectedEventArgs(connection));
-                    }
-                    catch
-                    {
-                        if (tcpClient.Connected)
-                        {
-                            tcpClient.Close();
-                        }
-
+                        Connection connection = new Connection(this, tcpClient);
                         lock (syncObject)
                         {
-                            connections.Remove(connection);
+                            connections.Add(connection);
                         }
-                    }
 
-                    tcpListener.BeginAcceptTcpClient(new AsyncCallback(AcceptTcpClientCallback), this.tcpListener);
+                        try
+                        {
+                            connection.BeginRead(
+                                new Connection.DataReceivedCallback(DataReceivedCallback),
+                                new Connection.DisconnectedCallback(DisconnectedCallback));
+                            OnClientConnected(connection);
+                            ClientConnected?.Invoke(this, new ClientConnectedEventArgs(connection));
+                        }
+                        catch
+                        {
+                            if (tcpClient.Connected)
+                            {
+                                tcpClient.Close();
+                            }
+
+                            lock (syncObject)
+                            {
+                                connections.Remove(connection);
+                            }
+                        }
+
+                        tcpListener.BeginAcceptTcpClient(new AsyncCallback(AcceptTcpClientCallback), this.tcpListener);
+                    }
                 }
+                catch { }
             }
         }
 
