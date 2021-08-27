@@ -54,7 +54,7 @@ namespace SimpleTcp.Client
         #region Constructor
         public BaseTcpClient(string host = null, int port = -1, int timeout = 3000)
         {
-            if(string.IsNullOrWhiteSpace(host) && port > 0)
+            if(!string.IsNullOrWhiteSpace(host) && port > 0)
             {
                 Connect(host, port, timeout);
             }
