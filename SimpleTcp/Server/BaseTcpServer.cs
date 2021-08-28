@@ -39,18 +39,21 @@ namespace SimpleTcp.Server
         /// <summary>
         /// Get Total received bytes count
         /// </summary>
-        public long TotalReceivedBytes { get; private set; }
+        public long TotalReceivedBytes { get => totalReceivedBytes; }
 
         /// <summary>
         /// Get Total sended bytes count
         /// </summary>
-        public long TotalSendedBytes { get; private set; }
+        public long TotalSendedBytes { get => totalSendedBytes; }
         #endregion
 
-        #region Private Member
+            #region Private Member
         private object syncObject = new object();
         private TcpListener tcpListener = null;
         private List<Connection> connections = new List<Connection>();
+
+        private long totalReceivedBytes = 0;
+        private long totalSendedBytes = 0;
         #endregion
 
         #region Protected Member
@@ -224,7 +227,7 @@ namespace SimpleTcp.Server
 
         private void DataReceivedCallback(Connection connection, int receivedSize)
         {
-            TotalReceivedBytes += receivedSize;
+            System.Threading.Interlocked.Add(ref totalReceivedBytes, receivedSize);
             OnDataReceived(connection, receivedSize);
         }
         #endregion
@@ -331,7 +334,7 @@ namespace SimpleTcp.Server
                             networkStream.Write(buffer, offset, count);
                             networkStream.Flush();
                             SendedBytes += count;
-                            _baseTcpServer.TotalSendedBytes += count;
+                            System.Threading.Interlocked.Add(ref _baseTcpServer.totalSendedBytes, count);
                         }
                     }
                 }

@@ -11,9 +11,18 @@ namespace SimpleTcp.Server
 {
     public class PacketTcpServer : BaseTcpServer
     {
-        #region PrivateMember
+        #region Properties
+        /// <summary>
+        /// Get Total received packet count
+        /// </summary>
+        public long TotalReceivedPackets { get => totalReceivedPackets; }
+        #endregion
+
+            #region PrivateMember
         private object syncObject = new object();
         private Dictionary<TcpClient, Packet> packets = new Dictionary<TcpClient, Packet>();
+
+        private long totalReceivedPackets = 0;
         #endregion
 
         #region Public Member
@@ -55,6 +64,7 @@ namespace SimpleTcp.Server
 
                 if (packet.IsComplete)
                 {
+                    System.Threading.Interlocked.Increment(ref totalReceivedPackets);
                     PacketReceived?.Invoke(this, new PacketReceivedEventArgs(packet));
                     lock (syncObject)
                     {

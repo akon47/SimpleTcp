@@ -32,6 +32,7 @@ namespace SimpleTcp.Client
             byte[] lengthBuffer = BitConverter.GetBytes(packetData.Length);
             base.Write(lengthBuffer, 0, lengthBuffer.Length);
             base.Write(packetData, 0, packetData.Length);
+            base.Flush();
         }
         #endregion
 

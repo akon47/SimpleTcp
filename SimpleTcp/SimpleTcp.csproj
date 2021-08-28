@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/akon47/SimpleTcp</RepositoryUrl>
     <PackageTags>SimpleTcp Tcp Client Server Socket</PackageTags>
     <PackageReleaseNotes>Fixed an issue where an exception was thrown in the server's Accept process when the server shuts down.</PackageReleaseNotes>
-    <AssemblyVersion>1.0.6.0</AssemblyVersion>
-    <FileVersion>1.0.6.0</FileVersion>
-    <Version>1.0.6</Version>
+    <AssemblyVersion>1.0.7.0</AssemblyVersion>
+    <FileVersion>1.0.7.0</FileVersion>
+    <Version>1.0.7</Version>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <Authors>Kim Hwan</Authors>
