@@ -128,6 +128,18 @@ namespace SimpleTcp.Client
             }
         }
 
+        protected void Flush()
+        {
+            lock (syncObject)
+            {
+                NetworkStream networkStream = tcpClient?.GetStream();
+                if (networkStream.CanWrite)
+                {
+                    networkStream.Flush();
+                }
+            }
+        }
+
         public void Disconnect()
         {
             lock(syncObject)
