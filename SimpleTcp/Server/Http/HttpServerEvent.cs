@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleTcp.Server
+namespace SimpleTcp.Server.Http
 {
     public class HttpRequestEventArgs : EventArgs
     {
