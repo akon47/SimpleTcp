@@ -23,6 +23,21 @@ tcpServer.ClientDisconnected += ClientDisconnected;
 tcpServer.DataReceived += DataReceived;
 ```
 
+### Get connected clinets
+```csharp
+tcpServer.Clients
+```
+
+### Send data to client
+```csharp
+tcpServer.Clients[0].Write(buffer, 0, buffer.Length);
+```
+
+### Send data to connected all clients
+```csharp
+tcpServer.WriteToAllClients(buffer, 0, buffer.Length);
+```
+---
 ### Connect to Tcp Server
 ```csharp
 RawTcpClient tcpClient = new RawTcpClient();
@@ -35,6 +50,11 @@ RawTcpClient tcpClient = new RawTcpClient();
 tcpClient.Connected += Connected;
 tcpClient.Disconnected += Disconnected;
 tcpClient.DataReceived += DataReceived;
+```
+
+### Send data to server
+```csharp
+tcpClient.Write(buffer, 0, buffer.Length);
 ```
 
 ## Examples
