@@ -343,6 +343,10 @@ namespace SimpleTcp.Server
                     _disconnected?.Invoke(this);
                 }
             }
+            public void Disconnect()
+            {
+                TcpClient?.Dispose();
+            }
 
             public override string ToString()
             {

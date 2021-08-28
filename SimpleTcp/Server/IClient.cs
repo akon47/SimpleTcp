@@ -45,5 +45,6 @@ namespace SimpleTcp.Server
 		byte[] ReadExisting();
 		int ReadByte();
 		void Write(byte[] buffer, int offset, int count);
+        void Disconnect();
 	}
 }
