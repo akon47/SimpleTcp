@@ -18,7 +18,7 @@ namespace SimpleTcp.Server
         public long TotalReceivedPackets { get => totalReceivedPackets; }
         #endregion
 
-            #region PrivateMember
+        #region PrivateMember
         private object syncObject = new object();
         private Dictionary<TcpClient, Packet> packets = new Dictionary<TcpClient, Packet>();
 
@@ -74,13 +74,27 @@ namespace SimpleTcp.Server
                 }
             }
         }
+        protected override void OnClientDisconnected(IClient client)
+        {
+            lock (syncObject)
+            {
+                try
+                {
+                    if (packets.ContainsKey(client.TcpClient))
+                    {
+                        packets.Remove(client.TcpClient);
+                    }
+                }
+                catch { }
+            }
+        }
         #endregion
 
         #region Public Methods
         public void WritePacket(TcpClient tcpClient, byte[] packetData)
         {
             IClient client = base.GetClient(tcpClient);
-            if(client != null)
+            if (client != null)
             {
                 byte[] lengthBuffer = BitConverter.GetBytes(packetData.Length);
                 client.Write(lengthBuffer, 0, lengthBuffer.Length);
@@ -97,7 +111,7 @@ namespace SimpleTcp.Server
         {
             #region Properties
             public TcpClient TcpClient { get; private set; }
-			public IPEndPoint IPEndPoint { get => TcpClient?.Client?.RemoteEndPoint as IPEndPoint; }
+            public IPEndPoint IPEndPoint { get => TcpClient?.Client?.RemoteEndPoint as IPEndPoint; }
             public byte[] PacketData { get => buffer; }
             public bool IsComplete { get => (buffer != null && (buffer.Length - writePosition) == 0); }
             #endregion
@@ -155,10 +169,10 @@ namespace SimpleTcp.Server
                 {
                     int bytesWritten = 0;
 
-                    if(buffer == null)
+                    if (buffer == null)
                     {
                         int lengthRemain = 4 - lengthWritePosition;
-                        if(count >= lengthRemain)
+                        if (count >= lengthRemain)
                         {
                             Array.Copy(data, offset, lengthBuffer, lengthWritePosition, lengthRemain);
                             buffer = new byte[BitConverter.ToUInt32(lengthBuffer, 0)];
