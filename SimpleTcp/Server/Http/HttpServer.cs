@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Sockets;
 using System.Text;
 
 namespace SimpleTcp.Server.Http
 {
     public class HttpServer : BaseTcpServer
     {
+        #region PrivateMember
+        private object syncObject = new object();
+        private Dictionary<TcpClient, HttpRequest> requests = new Dictionary<TcpClient, HttpRequest>();
+        #endregion
+
         #region Public Member
         /// <summary>
         /// Called when request from client.
@@ -32,7 +39,44 @@ namespace SimpleTcp.Server.Http
         #region Protected Methods
         protected override void OnDataReceived(IClient client, int receivedSize)
         {
-            
+            HttpRequest httpRequest = null;
+            lock (syncObject)
+            {
+                if (!requests.ContainsKey(client.TcpClient))
+                {
+                    httpRequest = new HttpRequest(client.TcpClient);
+                    requests.Add(client.TcpClient, httpRequest);
+                }
+                else
+                {
+                    httpRequest = requests[client.TcpClient];
+                }
+            }
+
+            while (client.BytesToRead > 0)
+            {
+                if(httpRequest.Process(client))
+                {
+                    HttpRequest?.Invoke(this, new HttpRequestEventArgs(httpRequest));
+                    client.Disconnect();
+                    break;
+                }
+            }
+        }
+
+        protected override void OnClientDisconnected(IClient client)
+        {
+            lock (syncObject)
+            {
+                try
+                {
+                    if (requests.ContainsKey(client.TcpClient))
+                    {
+                        requests.Remove(client.TcpClient);
+                    }
+                }
+                catch { }
+            }
         }
         #endregion
     }

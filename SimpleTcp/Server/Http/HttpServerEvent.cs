@@ -6,7 +6,12 @@ namespace SimpleTcp.Server.Http
 {
     public class HttpRequestEventArgs : EventArgs
     {
+        public IHttpRequest Request { get; private set; }
 
+        public HttpRequestEventArgs(IHttpRequest httpRequest)
+        {
+            Request = httpRequest;
+        }
     }
     public delegate void HttpRequestEventHandler(object sender, HttpRequestEventArgs e);
 }

@@ -4,9 +4,8 @@ using System.Text;
 
 namespace SimpleTcp.Server.Http
 {
-    public interface IHttpRequest
+    public class HttpHeaders : Dictionary<string, string>
     {
-        HttpMethods Method { get; }
-        HttpHeaders Headers { get; }
+        
     }
 }
