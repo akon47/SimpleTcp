@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/akon47/SimpleTcp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/akon47/SimpleTcp</RepositoryUrl>
     <PackageTags>SimpleTcp Tcp Client Server Socket</PackageTags>
-    <PackageReleaseNotes>Fixed a bug where correct values ​​were not accumulated in the server's TotalReceived and TotalSended properties.</PackageReleaseNotes>
-    <AssemblyVersion>1.0.7.0</AssemblyVersion>
-    <FileVersion>1.0.7.0</FileVersion>
-    <Version>1.0.7</Version>
+    <PackageReleaseNotes>Added Http Server function.</PackageReleaseNotes>
+    <AssemblyVersion>1.0.8.0</AssemblyVersion>
+    <FileVersion>1.0.8.0</FileVersion>
+    <Version>1.0.8</Version>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <Authors>Kim Hwan</Authors>
