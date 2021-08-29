@@ -56,6 +56,17 @@ tcpClient.DataReceived += DataReceived;
 ```csharp
 tcpClient.Write(buffer, 0, buffer.Length);
 ```
+---
+### Start Simple Http Server
+See the example project for details.
+```csharp
+HttpServer httpServer = new HttpServer();
+httpServer.HttpRequest += (sender, e) =>
+{
+    return new HttpResponse(HttpStatusCode.OK); 
+};
+httpServer.Start(); // default start port is 80
+```
 
 ## Examples
 
@@ -209,3 +220,42 @@ static void Main(string[] args)
 ```
 
 ![image](https://user-images.githubusercontent.com/49547202/130899797-381176ee-9ac8-4804-9c85-bd1e4300b4b5.png)
+
+### Simple Http Server
+```csharp
+static void Main(string[] args)
+{
+    using (var httpServer = new SimpleTcp.Server.Http.HttpServer())
+    {
+        httpServer.HttpRequest += (sender, e) =>
+        {
+            Console.WriteLine($"[{e.Request.IPEndPoint}] -> [{e.Request.Url}]");
+            switch(e.Request.Url)
+            {
+                case "/":
+                    return new HttpResponse(HttpStatusCode.OK)
+                    {
+                        Content = Encoding.UTF8.GetBytes(
+                            "<!DOCTYPE html>" +
+                            "<html>" +
+                            "<head>" +
+                            "<meta charset=\"UTF-8\">" +
+                            "<title>SimpleTcp HttpServer Example</title>" +
+                            "</head>" +
+                            "<body>" +
+                            "Hello, World !!<br/><a href=\"https://github.com/akon47/SimpleTcp\">Github</a>" +
+                            "</body>" +
+                            "</html>")
+                    };
+                default:
+                    return new HttpResponse(HttpStatusCode.NotFound);
+            }
+        };
+        httpServer.Start();
+
+        Console.ReadLine();
+    }
+}
+```
+
+![image](https://user-images.githubusercontent.com/49547202/131252066-8d2bb113-48f7-4dfc-8ac2-039fe28c0de3.png)
