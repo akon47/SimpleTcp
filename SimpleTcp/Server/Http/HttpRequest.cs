@@ -126,18 +126,25 @@ namespace SimpleTcp.Server.Http
                         int index = request[i].IndexOf(':');
                         if(index >= 0)
                         {
-                            string headerName = request[i].Substring(0, index).Trim();
+                            string headerName = request[i].Substring(0, index).Trim().ToLower(); // always lowercase header name
                             string headerValue = request[i].Substring(index + 1).Trim();
-                            Headers.Add(headerName, headerValue);
+                            if (Headers.ContainsKey(headerValue))
+                            {
+                                Headers[headerName] += $", {headerValue}";
+                            }
+                            else
+                            {
+                                Headers.Add(headerName, headerValue);
+                            }
                         }
                         #endregion
                         break;
                 }
             }
 
-            if(Headers.ContainsKey("Content-Length"))
+            if(Headers.ContainsKey("content-length"))
             {
-                contentLength = Convert.ToInt32(Headers["Content-Length"]);
+                contentLength = Convert.ToInt32(Headers["content-length"]);
                 Content = new byte[contentLength];
                 contentWritePosition = 0;
             }

@@ -13,5 +13,5 @@ namespace SimpleTcp.Server.Http
             Request = httpRequest;
         }
     }
-    public delegate void HttpRequestEventHandler(object sender, HttpRequestEventArgs e);
+    public delegate HttpResponse HttpRequestEventHandler(object sender, HttpRequestEventArgs e);
 }
