@@ -93,7 +93,7 @@ namespace SimpleTcp.Server.Http
             }
             httpResponse.Headers["content-length"] = $"{httpResponse.Content?.Length ?? 0}";
 
-            WriteText(client, $"HTTP/1.0 {httpResponse.StatusCode} {httpResponse.ReasonPhrase}\r\n");
+            WriteText(client, $"HTTP/1.1 {httpResponse.StatusCode} {httpResponse.ReasonPhrase}\r\n");
             WriteText(client, httpResponse.Headers.ToString());
             WriteText(client, "\r\n\r\n"); // end
 
