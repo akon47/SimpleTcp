@@ -123,6 +123,7 @@ namespace SimpleTcp.Client
                 if (networkStream.CanWrite)
                 {
                     networkStream.Write(buffer, offset, count);
+                    networkStream.Flush();
                     TotalSendedBytes += count;
                 }
             }
