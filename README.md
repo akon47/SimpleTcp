@@ -1,3 +1,5 @@
+![logo](https://raw.githubusercontent.com/akon47/SimpleTcp/master/SimpleTcp/logo.png)
+
 # SimpleTcp
 <p>
   <img alt="MIT license" src="https://img.shields.io/badge/License-MIT-green.svg">
@@ -7,7 +9,12 @@
 </p>
 A simple-to-use TCP server and client library.   
 
-## Usage
+## 🎨 Features
+- Asynchronous servers and clients that are very easy to use.
+- PacketTcpServer that ensures reception without truncating the size of the data sent.
+- HTTP server that is very simple to use.
+
+## 📃 Usage
 
 ### Start Tcp Server
 ```csharp
@@ -68,8 +75,11 @@ httpServer.HttpRequest += (sender, e) =>
 httpServer.Start(); // default start port is 80
 ```
 
-## Examples
+## 🐾 Examples
 
+<details>
+<summary style="font-Weight : bold; font-size : 30px; color : #E43914;" >Echo Server / Client</summary>
+  
 ### Echo Server
 ```csharp
 static void Main(string[] args)
@@ -146,7 +156,12 @@ static void Main(string[] args)
     }
 }
 ```
+  
+</details>
 
+<details>
+<summary style="font-Weight : bold; font-size : 30px; color : #E43914;" >Packet Echo Server / Client</summary>
+  
 ### Packet Echo Server
 The size of the received data is received without being cut off.
 ```csharp
@@ -220,7 +235,12 @@ static void Main(string[] args)
 ```
 
 ![image](https://user-images.githubusercontent.com/49547202/130899797-381176ee-9ac8-4804-9c85-bd1e4300b4b5.png)
+  
+</details>
 
+<details>
+<summary style="font-Weight : bold; font-size : 30px; color : #E43914;" >Http Server / Client</summary>
+  
 ### Simple Http Server
 ```csharp
 static void Main(string[] args)
@@ -259,3 +279,10 @@ static void Main(string[] args)
 ```
 
 ![image](https://user-images.githubusercontent.com/49547202/131252066-8d2bb113-48f7-4dfc-8ac2-039fe28c0de3.png)
+  
+</details>
+
+
+
+## 🐞 Bug Report
+If you find a bug, please report to us posting [issues](https://github.com/akon47/SimpleTcp/issues) on GitHub.
