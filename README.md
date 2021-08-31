@@ -2,6 +2,7 @@
 
 # SimpleTcp
 <p>
+    <img alt="Hits" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fakon47%2FSimpleTcp&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" />
   <img alt="MIT license" src="https://img.shields.io/badge/License-MIT-green.svg">
   <img alt="Nuget version" src="https://img.shields.io/nuget/v/SimpleTcpLib">
   <img alt="Nuget downloads" src="https://img.shields.io/nuget/dt/SimpleTcpLib">
