@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace SimpleTcp.Server.Http
@@ -14,16 +15,27 @@ namespace SimpleTcp.Server.Http
         public int StatusCode { get; set; }
         public string ReasonPhrase { get; set; }
         public byte[] Content { get; set; }
-        public HttpHeaders Headers { get; private set; }
+        public HttpHeaders Headers { get; private set; } = new HttpHeaders();
+        #endregion
+
+        #region Private Members
+        private Stream _contentStream;
+        private bool _leaveOpen;
         #endregion
 
         #region Public Methods
         public HttpResponse()
         {
-            Headers = new HttpHeaders();
+            _contentStream = null;
         }
 
-        public HttpResponse(HttpStatusCode httpStatusCode) : this()
+        public HttpResponse(Stream contentStream, bool leaveOpen = false)
+        {
+            _contentStream = contentStream;
+            _leaveOpen = leaveOpen;
+        }
+
+        public HttpResponse(HttpStatusCode httpStatusCode, Stream contentStream = null, bool leaveOpen = false) : this(contentStream, leaveOpen)
         {
             StatusCode = (int)httpStatusCode;
             #region SetReasonPhrase
@@ -157,6 +169,32 @@ namespace SimpleTcp.Server.Http
                     break;
             }
             #endregion
+        }
+
+        public Stream GetContentStream()
+        {
+            if(_contentStream != null)
+            {
+                return _contentStream;
+            }
+            else if(Content != null)
+            {
+                _contentStream = new MemoryStream(Content);
+                _leaveOpen = false;
+                return _contentStream;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void Dispose()
+        {
+            if(!_leaveOpen)
+            {
+                _contentStream?.Close();
+            }
         }
         #endregion
     }

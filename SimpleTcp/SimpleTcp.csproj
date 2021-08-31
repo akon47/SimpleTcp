@@ -8,10 +8,10 @@
     <PackageProjectUrl>https://github.com/akon47/SimpleTcp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/akon47/SimpleTcp</RepositoryUrl>
     <PackageTags>SimpleTcp Tcp Client Server Socket</PackageTags>
-    <PackageReleaseNotes>Added Http Server function.</PackageReleaseNotes>
-    <AssemblyVersion>1.0.8.0</AssemblyVersion>
-    <FileVersion>1.0.8.0</FileVersion>
-    <Version>1.0.8</Version>
+    <PackageReleaseNotes>Improved the ability to return large files from Http servers.</PackageReleaseNotes>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
+    <FileVersion>1.0.9.0</FileVersion>
+    <Version>1.0.9</Version>
     <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <Authors>Kim Hwan</Authors>
