@@ -15,7 +15,7 @@ namespace UnitTestProject
             Assert.IsFalse(rawTcpServer.IsStarted);
 
 
-            rawTcpServer.Start(5000);
+            rawTcpServer.Start(0);
             Assert.IsTrue(rawTcpServer.IsStarted, "RawTcpServer is started by start function");
 
             rawTcpServer.Stop();
@@ -26,7 +26,7 @@ namespace UnitTestProject
         [TestMethod]
         public void StartStopRawTcpServer_StartWithConstructorAndStopWithStopFunction()
         {
-            var rawTcpServer = new RawTcpServer(5000);
+            var rawTcpServer = new RawTcpServer(0);
             Assert.IsTrue(rawTcpServer.IsStarted, "RawTcpServer is started by constructor");
 
             rawTcpServer.Stop();

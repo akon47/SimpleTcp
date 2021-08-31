@@ -15,7 +15,7 @@ namespace UnitTestProject
             Assert.IsFalse(packetTcpServer.IsStarted);
 
 
-            packetTcpServer.Start(5000);
+            packetTcpServer.Start(0);
             Assert.IsTrue(packetTcpServer.IsStarted, "PacketTcpServer is started by start function");
 
             packetTcpServer.Stop();
@@ -26,7 +26,7 @@ namespace UnitTestProject
         [TestMethod]
         public void StartStopPacketTcpServer_StartWithConstructorAndStopWithStopFunction()
         {
-            var packetTcpServer = new RawTcpServer(5000);
+            var packetTcpServer = new RawTcpServer(0);
             Assert.IsTrue(packetTcpServer.IsStarted, "PacketTcpServer is started by constructor");
 
             packetTcpServer.Stop();

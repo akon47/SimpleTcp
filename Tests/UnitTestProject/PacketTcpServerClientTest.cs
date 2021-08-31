@@ -17,7 +17,7 @@ namespace UnitTestProject
             var packetTcpServer = new PacketTcpServer();
             Assert.IsFalse(packetTcpServer.IsStarted);
 
-            packetTcpServer.Start(5005);
+            packetTcpServer.Start(0);
             Assert.IsTrue(packetTcpServer.IsStarted, "PacketTcpServer is started by start function");
 
             Assert.IsTrue(packetTcpServer.Clients.Length == 0);
@@ -26,7 +26,7 @@ namespace UnitTestProject
             for(int i = 0; i < 25; i++)
             {
                 var packetTcpClient = new PacketTcpClient();
-                packetTcpClient.Connect("localhost", 5005);
+                packetTcpClient.Connect("localhost", packetTcpServer.Port);
                 Assert.IsTrue(packetTcpClient.IsConnected);
                 packetTcpClients.Add(packetTcpClient);
             }
@@ -37,7 +37,7 @@ namespace UnitTestProject
 
             for (int i = 0; i < 25; i++)
             {
-                var packetTcpClient = new PacketTcpClient("localhost", 5005);
+                var packetTcpClient = new PacketTcpClient("localhost", packetTcpServer.Port);
                 Assert.IsTrue(packetTcpClient.IsConnected);
                 packetTcpClients.Add(packetTcpClient);
             }
