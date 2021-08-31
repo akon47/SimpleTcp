@@ -239,7 +239,7 @@ static void Main(string[] args)
 </details>
 
 <details>
-<summary style="font-Weight : bold; font-size : 30px; color : #E43914;" >Http Server / Client</summary>
+<summary style="font-Weight : bold; font-size : 30px; color : #E43914;" >Http Server</summary>
   
 ### Simple Http Server
 ```csharp
