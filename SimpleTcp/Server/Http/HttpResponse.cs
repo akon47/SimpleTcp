@@ -14,7 +14,24 @@ namespace SimpleTcp.Server.Http
         #region Properties
         public int StatusCode { get; set; }
         public string ReasonPhrase { get; set; }
-        public byte[] Content { get; set; }
+
+        private byte[] _content;
+        public byte[] Content
+        {
+            get => _content;
+            set
+            {
+                if(_content == null && _contentStream == null )
+                {
+                    _content = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("content is already set");
+                }
+            }
+        }
+
         public HttpHeaders Headers { get; private set; } = new HttpHeaders();
         #endregion
 
@@ -35,7 +52,21 @@ namespace SimpleTcp.Server.Http
             _leaveOpen = leaveOpen;
         }
 
+        public HttpResponse(string filePath, string contentType) : this(new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        {
+            SetHttpStatusCode(HttpStatusCode.OK);
+            if(!string.IsNullOrWhiteSpace(contentType))
+            {
+                Headers["content-type"] = contentType;
+            }
+        }
+
         public HttpResponse(HttpStatusCode httpStatusCode, Stream contentStream = null, bool leaveOpen = false) : this(contentStream, leaveOpen)
+        {
+            SetHttpStatusCode(httpStatusCode);
+        }
+
+        public void SetHttpStatusCode(HttpStatusCode httpStatusCode)
         {
             StatusCode = (int)httpStatusCode;
             #region SetReasonPhrase
