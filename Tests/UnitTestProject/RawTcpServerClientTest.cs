@@ -17,7 +17,7 @@ namespace UnitTestProject
             var rawTcpServer = new RawTcpServer();
             Assert.IsFalse(rawTcpServer.IsStarted);
 
-            rawTcpServer.Start(5001);
+            rawTcpServer.Start(0);
             Assert.IsTrue(rawTcpServer.IsStarted, "RawTcpServer is started by start function");
 
             Assert.IsTrue(rawTcpServer.Clients.Length == 0);
@@ -26,7 +26,7 @@ namespace UnitTestProject
             for(int i = 0; i < 25; i++)
             {
                 var rawTcpClient = new RawTcpClient();
-                rawTcpClient.Connect("localhost", 5001);
+                rawTcpClient.Connect("localhost", rawTcpServer.Port);
                 Assert.IsTrue(rawTcpClient.IsConnected);
                 rawTcpClients.Add(rawTcpClient);
             }
@@ -37,7 +37,7 @@ namespace UnitTestProject
 
             for (int i = 0; i < 25; i++)
             {
-                var rawTcpClient = new RawTcpClient("localhost", 5001);
+                var rawTcpClient = new RawTcpClient("localhost", rawTcpServer.Port);
                 Assert.IsTrue(rawTcpClient.IsConnected);
                 rawTcpClients.Add(rawTcpClient);
             }

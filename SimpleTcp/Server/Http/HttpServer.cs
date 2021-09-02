@@ -57,10 +57,11 @@ namespace SimpleTcp.Server.Http
             {
                 if(httpRequest.Process(client))
                 {
-                    HttpResponse httpResponse = HttpRequest?.Invoke(this, new HttpRequestEventArgs(httpRequest));
+                    IHttpResponse httpResponse = HttpRequest?.Invoke(this, new HttpRequestEventArgs(httpRequest));
                     if(httpResponse != null)
                     {
                         WriteHttpResponse(httpResponse, client);
+                        httpResponse.Dispose();
                     }
                     client.Disconnect();
                     break;
@@ -85,21 +86,29 @@ namespace SimpleTcp.Server.Http
         #endregion
 
         #region Private Methods
-        private void WriteHttpResponse(HttpResponse httpResponse, IClient client)
+        private void WriteHttpResponse(IHttpResponse httpResponse, IClient client)
         {
             if(!httpResponse.Headers.ContainsKey("content-type"))
             {
                 httpResponse.Headers.Add("content-type", "text/html");
             }
-            httpResponse.Headers["content-length"] = $"{httpResponse.Content?.Length ?? 0}";
+
+            Stream contentStream = httpResponse.GetContentStream();
+            httpResponse.Headers["content-length"] = $"{contentStream?.Length ?? 0}";
 
             WriteText(client, $"HTTP/1.1 {httpResponse.StatusCode} {httpResponse.ReasonPhrase}\r\n");
             WriteText(client, httpResponse.Headers.ToString());
             WriteText(client, "\r\n\r\n"); // end
 
-            if(httpResponse.Content != null && httpResponse.Content.Length > 0)
+            if(contentStream?.Length > 0)
             {
-                client.Write(httpResponse.Content, 0, httpResponse.Content.Length);
+                byte[] buffer = new byte[1024 * 4];
+
+                int readBytes;
+                while((readBytes = contentStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    client.Write(buffer, 0, readBytes);
+                }
             }
         }
 

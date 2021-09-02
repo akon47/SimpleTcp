@@ -81,7 +81,7 @@ namespace SimpleTcp.Server
         /// <param name="port">If you specify a valid port, the server starts immediately.</param>
         public BaseTcpServer(int port = -1)
         {
-            if (port > 0)
+            if (port >= 0)
             {
                 Start(port);
             }
